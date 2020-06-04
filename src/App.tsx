@@ -7,9 +7,10 @@ const App: React.FC = () => {
 
   const [latitude,setLatitude] = useState<number | undefined>(); 
   const [longitude,setLongitude] = useState<number | undefined>(); 
-  const [data, setData] = useState<any []>();
+  // const [data, setData] = useState<any []>();
   
-  const url = "https://cors.io/?https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=hospital&inputtype=textquery&fields=photos,formatted_address,name,opening_hours,rating&locationbias=circle:2000@"+latitude+","+longitude+"&sensor=false&key="+key
+  const url:string = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=hospital&inputtype=textquery&fields=photos,formatted_address,name,opening_hours,rating&locationbias=circle:2000@"+latitude+","+longitude+"&sensor=false&key="+key
+  
   const getLocation = ():void => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition( position => {
@@ -25,11 +26,11 @@ const App: React.FC = () => {
       alert("Enable location")
     }
   }
- 
+
   // issues with fetch and maps API 
   const gethospitals = ():void => {
     fetch(url)
-      .then(response => response.text().then((s) => console.log(JSON.parse(s))))
+      .then(response => response.json())
       .then(data => console.log(data))
   }
   return (
@@ -44,7 +45,7 @@ const App: React.FC = () => {
         className="location"
         onClick={gethospitals}
       >
-        Get url
+        Get Hospitals
       </button>
     </div>
 
