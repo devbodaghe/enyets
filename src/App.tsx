@@ -7,9 +7,11 @@ const App: React.FC = () => {
 
   const [latitude,setLatitude] = useState<number | undefined>(); 
   const [longitude,setLongitude] = useState<number | undefined>(); 
-  // const [data, setData] = useState<any []>();
+  const [data, setData] = useState<any []>();
   
-  const url:string = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=hospital&inputtype=textquery&fields=photos,formatted_address,name,opening_hours,rating&locationbias=circle:2000@"+latitude+","+longitude+"&sensor=false&key="+key
+  const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';  
+  const url:string = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=hospital&inputtype=textquery&fields=photos,formatted_address,name,opening_hours,rating&locationbias=circle:2000@"+latitude+","+longitude+"&key="+key 
+  const URL = PROXY_URL + url
   
   const getLocation = ():void => {
     if (navigator.geolocation) {
@@ -29,9 +31,11 @@ const App: React.FC = () => {
 
   // issues with fetch and maps API 
   const gethospitals = ():void => {
-    fetch(url)
-      .then(response => response.json())
-      .then(data => console.log(data))
+    console.log(url)
+    fetch(URL)
+      .then(res => res.json())
+      // .then(data => console.log(data.results))
+      .then(data => setData(data.results))
   }
   return (
     <div>
@@ -47,6 +51,18 @@ const App: React.FC = () => {
       >
         Get Hospitals
       </button>
+      <div>
+        <ul>
+          {
+            data && 
+            data.map( result => {
+              return (
+                <li key={result.formatted_address}>{result.formatted_address}</li>
+              )
+            })
+          }
+        </ul>
+      </div>
     </div>
 
   )
