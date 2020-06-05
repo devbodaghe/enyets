@@ -10,7 +10,9 @@ const App: React.FC = () => {
   const [data, setData] = useState<any []>();
   
   const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';  
-  const url:string = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=hospital&inputtype=textquery&fields=photos,formatted_address,name,opening_hours,rating&locationbias=circle:2000@"+latitude+","+longitude+"&key="+key 
+  // const url:string = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=hospital&inputtype=textquery&fields=photos,formatted_address,name,opening_hours,rating&locationbias=circle:2000@"+latitude+","+longitude+"&key="+key 
+  const url:string = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&type=hospital&radius=500&key=${key}`; // site that doesn’t send Access-Control-*
+
   const URL = PROXY_URL + url
   
   const getLocation = ():void => {
@@ -34,8 +36,8 @@ const App: React.FC = () => {
     console.log(url)
     fetch(URL)
       .then(res => res.json())
-      // .then(data => console.log(data.results))
-      .then(data => setData(data.results))
+      .then(data => console.log(data.results))
+      // .then(data => setData(data.results))
   }
   return (
     <div>
